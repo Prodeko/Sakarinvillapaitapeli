@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import next from '../public/next.svg'
+import Chat from '../components/Chat'
 
 export default function Home() {
   const sendPrompt = async (params: any) => {
@@ -34,12 +35,6 @@ export default function Home() {
         </div>
     </div>
   )
-}
-
-function Chat () {
-  return <div>
-    <p>foobar</p>
-  </div>
 }
 
 function ErrorMessage () {

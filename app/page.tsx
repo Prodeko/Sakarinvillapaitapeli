@@ -17,7 +17,7 @@ export default function Home() {
       }}
     >
       <div
-        className="absolute right-6 top-4 text-6xl"
+        className="right-6 top-4 text-2xl sm:text-2xl md:text-8xl lg:text-8xl absolute"
         style={{ fontFamily: 'Comic Sans MS' }}
       >
         SAKARIN VILLAPAITAPELI

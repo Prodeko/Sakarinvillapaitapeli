@@ -1,5 +1,6 @@
 'use client'
 import { generateSystemPrompt } from '@/common/prompts'
+import { checkIfMessageContainsWinningToken } from '@/utils/checkIfMessageContainsWinningToken'
 import {
   FAKE_LAG_AFTER_CHAT_LIMIT_HARD_CAP_MS,
   MAX_CHAT_LENGTH,
@@ -68,6 +69,10 @@ const Chat = () => {
       role: response.role,
       content: response.content,
     }
+
+    const isWon = checkIfMessageContainsWinningToken(newMsg.content)
+
+    setIsWon(isWon)
     setChatHistory([...newChats, newMsg])
     setLoading(false)
   }

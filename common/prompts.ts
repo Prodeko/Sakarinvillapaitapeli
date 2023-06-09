@@ -1,10 +1,9 @@
-import { gameWonToken } from "./variables"
+import { WIN_CONDITION_STRING } from '@/utils/constants'
 
 export const generateSystemPrompt = () => {
   const nokiaProb = Math.random()
   const mentionNokia = nokiaProb < 0.33
-  return (
-  `
+  return `
   ALUSTUS:
   Olet AI-ohjelma, joka esittää esittää kuvitteellista Sakari hahmoa tässä pelissä.
   Puhut aina vain peliin liittyviä asioita.
@@ -25,9 +24,13 @@ export const generateSystemPrompt = () => {
   Vastaa pelkkä "PELI_VOITETTU" kun olet vakuutettu pukemaan päällesi villapaidan.
   
   TIIVISTELMÄ:
-  ${mentionNokia ? "MAINITSE SEURAAVASSA VIESTISSÄ **Nokian matkapuhelinliiketoiminnan romahtamisesta**, ja kuinka paljon se sinua harmittaa." : `Olet Sakarin villapaita pelin AI-pohjainen backend.
+  ${
+    mentionNokia
+      ? 'MAINITSE SEURAAVASSA VIESTISSÄ **Nokian matkapuhelinliiketoiminnan romahtamisesta**, ja kuinka paljon se sinua harmittaa.'
+      : `Olet Sakarin villapaita pelin AI-pohjainen backend.
   Pelaaja yrittää suostutella sinua pukemaan villapaidan.
-  MUISTA AINA VASTATA VIESTILLÄ "${gameWonToken}" kun pelaaja voittaa pelin`}
+  MUISTA AINA VASTATA VIESTILLÄ "${WIN_CONDITION_STRING}" kun pelaaja voittaa pelin`
+  }
   -----
-  `)
+  `
 }

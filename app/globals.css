@@ -24,4 +24,6 @@ body {
   height: 100%;
   background-color: black;
   background-image: url("../public/Background.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
 }

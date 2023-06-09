@@ -69,7 +69,7 @@ const Chat = () => {
           type="text"
           value={prompt}
           onChange={handleTyping}
-          className="border"
+          className="border w-full"
         />
       </form>
     </div>

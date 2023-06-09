@@ -40,6 +40,7 @@ export const generateSystemPrompt = () => {
   ------------
 
   MUISTA VASTATA PELKKÄ "${WIN_CONDITION_STRING}" KUN PELI ON VOITETTU! MUUTEN PELI ON PILALLA!
+  ÄLÄ KUITENKAAN KIRJOITA "${WIN_CONDITION_STRING}" JOS PELIÄ EI OLE VOITETTU!
   `
   
   console.log(prompt)

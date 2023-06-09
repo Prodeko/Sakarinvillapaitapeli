@@ -23,8 +23,10 @@ const Chat = () => {
   ])
   const [prompt, setPrompt] = useState<string>('')
   const [isWon, setIsWon] = useState(false)
+  const [loading, setLoading] = useState(false)
 
   const sendPrompt = async () => {
+    setLoading(true)
     const sysPrompt: ChatMessage = {
       role: 'system',
       content: generateSystemPrompt(),
@@ -67,6 +69,7 @@ const Chat = () => {
       content: response.content,
     }
     setChatHistory([...newChats, newMsg])
+    setLoading(false)
   }
 
   const handleTyping = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -99,6 +102,9 @@ const Chat = () => {
           </div>
         ))}
       </div>
+      {loading && (
+        <p>Sakari pohtii...</p>
+      )}
       <form onSubmit={submitPrompt}>
         <input
           type="text"

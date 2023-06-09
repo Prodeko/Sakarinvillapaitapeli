@@ -1,7 +1,7 @@
 'use client'
 import { FunctionComponent } from "react";
 
- const NanniButton = (props) => {
+ const NanniButton = (props: any) => {
   // TODO: Proper quotes
   const quotes = ["raineri", "kuvaa tulee", 
 '"Doge ftw — Elon Musk" — Sakari',

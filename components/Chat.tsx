@@ -1,25 +1,33 @@
 "use client"
-import { Props } from "next/script";
-import { ChangeEvent, FormEventHandler, useState } from "react";
+import { systemPrompt } from "@/common/prompts";
+import { useState } from "react";
 
 interface ChatMessage {
   content: string;
   role: "user" | "assistant" | "system"
 }
 
+const initialMessage: ChatMessage = {
+  role: "assistant",
+  content: "Onpas tänään viileä päivä..."
+}
+
 
 const Chat = () => {
-  const [chatHistory, setChatHistory] = useState<ChatMessage[]>([])
+  const [chatHistory, setChatHistory] = useState<ChatMessage[]>([initialMessage])
   const [prompt, setPrompt] = useState<string>('')
 
   const sendPrompt = async () => {
     const newChats: ChatMessage[] = [...chatHistory, {content: prompt, role: "user"}]
+    const sysPrompt: ChatMessage = {
+      role: "system",
+      content: systemPrompt
+    }
     const params =  {
       "model": "gpt-3.5-turbo",
-      "messages": newChats
+      "messages": [sysPrompt, ...newChats]
     }
     const apiKey = process.env.NEXT_PUBLIC_OPENAI_API_KEY
-    console.log("apiKey", apiKey)
     const res = await fetch("https://api.openai.com/v1/chat/completions", {
       headers: {
         "Content-Type": "application/json",

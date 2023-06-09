@@ -3,7 +3,11 @@ import next from '../public/next.svg'
 import Chat from '../components/Chat'
 
 export default function Home() {
-  const sendPrompt = async (params: any) => {
+  const sendPrompt = async () => {
+    const params =  {
+      "model": "gpt-3.5-turbo",
+      "messages": [{"role": "user", "content": "Moi, miten menee?"}]
+    }
     const apiKey = process.env.OPENAI_API_KEY
     const res = await fetch("https://api.openai.com/v1/chat/completions", {
       headers: {

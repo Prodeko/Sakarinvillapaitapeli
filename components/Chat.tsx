@@ -89,7 +89,7 @@ const Chat = () => {
   }
 
   return (
-    <div className="flex flex-col gap-4 p-6">
+    <div className="flex flex-col gap-4 p-6 max-w-full overflow-scroll">
       <div className="flex flex-col gap-4 py-24">
         {chatHistory.map((message: ChatMessage) => (
           <div key={message.content}>

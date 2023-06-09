@@ -2,6 +2,19 @@ import Image from 'next/image'
 import next from '../public/next.svg'
 
 export default function Home() {
+  const sendPrompt = async (params: any) => {
+    const apiKey = process.env.OPENAI_API_KEY
+    const res = await fetch("https://api.openai.com/v1/chat/completions", {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${apiKey}`,
+      },
+      method: "POST",
+      body: JSON.stringify(params),
+    })
+    const { messages } = await res.json()
+    console.log(messages)
+  }
   return (
     <div className='w-full h-full flex'>
         <ErrorMessage></ErrorMessage>
@@ -15,8 +28,8 @@ export default function Home() {
               priority
             />
             <div>
-            <h1>Sakarin villapaitapeli</h1>
-            <Chat></Chat>
+              <h1>Sakarin villapaitapeli</h1>
+              <Chat />
             </div>
         </div>
     </div>

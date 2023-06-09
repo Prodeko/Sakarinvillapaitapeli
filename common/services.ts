@@ -1,11 +1,4 @@
-type ChatMessage = {
-    role: "user" | "assistant" | "system",
-    content: string
-}
-
-type ChatList = {
-    messages: Array<ChatMessage>
-}
+import { ChatList} from '../common/types'
 
 export /**
 * Utility function for calling the OpenAI streaming endpoint

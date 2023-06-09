@@ -37,12 +37,6 @@ export default function Home() {
   )
 }
 
-function Chat () {
-  return <div>
-    <p>foobar</p>
-  </div>
-}
-
 function ErrorMessage () {
   return <div className='absolute top-0 right-0 bottom-o left-0 m-auto w-full h-full'>
     <Image

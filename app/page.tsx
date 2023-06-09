@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import next from '../public/next.svg'
+import Chat from '../components/Chat'
 
 export default function Home() {
   const sendPrompt = async (params: any) => {

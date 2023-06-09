@@ -16,10 +16,7 @@ export default function Home() {
         backgroundSize: 'cover',
       }}
     >
-      <div
-        className="right-6 top-4 text-2xl sm:text-2xl md:text-8xl lg:text-8xl absolute"
-        style={{ fontFamily: 'Comic Sans MS' }}
-      >
+      <div className="right-6 top-4 text-2xl sm:text-2xl md:text-8xl lg:text-8xl absolute">
         SAKARIN VILLAPAITAPELI
       </div>
       <div className="grid grid-cols-1 grid-rows-2 md:grid-rows-1 md:grid-cols-[3fr_1fr] h-full w-full">

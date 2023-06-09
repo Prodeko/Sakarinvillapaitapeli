@@ -3,7 +3,7 @@ import { Props } from "next/script";
 import { ChangeEvent, FormEventHandler, useState } from "react";
 
 interface ChatMessage {
-  message: string;
+  content: string;
   role: "user" | "assistant" | "system"
 }
 
@@ -13,11 +13,13 @@ const Chat = () => {
   const [prompt, setPrompt] = useState<string>('')
 
   const sendPrompt = async () => {
+    const newChats: ChatMessage[] = [...chatHistory, {content: prompt, role: "user"}]
     const params =  {
       "model": "gpt-3.5-turbo",
-      "messages": [{"role": "user", "content": "Moi, miten menee?"}]
+      "messages": newChats
     }
-    const apiKey = process.env.OPENAI_API_KEY
+    const apiKey = process.env.NEXT_PUBLIC_OPENAI_API_KEY
+    console.log("apiKey", apiKey)
     const res = await fetch("https://api.openai.com/v1/chat/completions", {
       headers: {
         "Content-Type": "application/json",
@@ -26,8 +28,10 @@ const Chat = () => {
       method: "POST",
       body: JSON.stringify(params),
     })
-    const { messages } = await res.json()
-    console.log(messages)
+    const { choices } = await res.json()
+    const response = choices[0].message
+    const newMsg: ChatMessage = {role: response.role, content: response.content}
+    setChatHistory(chatHistory => [...chatHistory, newMsg])
   }
   
   const handleTyping = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -37,8 +41,8 @@ const Chat = () => {
 
   const submitPrompt = (event: any) => {
     event.preventDefault()
-    setChatHistory(chats => [...chats, {message: prompt, role: "user"}])
     setPrompt('')
+    sendPrompt()
   }
 
   return(
@@ -47,8 +51,8 @@ const Chat = () => {
         {chatHistory.map((message: ChatMessage) =>
           <div
             className={message.role === "user" ? "self-start" : "self-end"}
-            key={message.message}>
-            {message.role}: {message.message}
+            key={message.content}>
+            {message.role}: {message.content}
           </div>
         )}
       </div>

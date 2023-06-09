@@ -1,47 +1,74 @@
-"use client"
-import { generateSystemPrompt } from "@/common/prompts";
-import { useState } from "react";
+'use client'
+import { generateSystemPrompt } from '@/common/prompts'
+import {
+  FAKE_LAG_AFTER_CHAT_LIMIT_HARD_CAP_MS,
+  MAX_CHAT_LENGTH,
+  WINNING_MESSAGE,
+} from '@/utils/constants'
+import { useState } from 'react'
 
 interface ChatMessage {
-  content: string;
-  role: "user" | "assistant" | "system"
+  content: string
+  role: 'user' | 'assistant' | 'system'
 }
 
 const initialMessage: ChatMessage = {
-  role: "assistant",
-  content: "Onpas tänään viileä päivä..."
+  role: 'assistant',
+  content: 'Onpas tänään viileä päivä...',
 }
 
-
 const Chat = () => {
-  const [chatHistory, setChatHistory] = useState<ChatMessage[]>([initialMessage])
+  const [chatHistory, setChatHistory] = useState<ChatMessage[]>([
+    initialMessage,
+  ])
   const [prompt, setPrompt] = useState<string>('')
+  const [isWon, setIsWon] = useState(false)
 
   const sendPrompt = async () => {
-    const newChats: ChatMessage[] = [...chatHistory, {content: prompt, role: "user"}]
     const sysPrompt: ChatMessage = {
-      role: "system",
-      content: generateSystemPrompt()
+      role: 'system',
+      content: generateSystemPrompt(),
     }
-    const params =  {
-      "model": "gpt-3.5-turbo",
-      "messages": [sysPrompt, ...newChats]
+
+    // Hard limit chat length
+    if (chatHistory.length >= MAX_CHAT_LENGTH) {
+      const winningMessage: ChatMessage = {
+        content: WINNING_MESSAGE,
+        role: 'system',
+      }
+      setTimeout(() => {
+        setChatHistory([...chatHistory, winningMessage])
+        setIsWon(true)
+      }, FAKE_LAG_AFTER_CHAT_LIMIT_HARD_CAP_MS)
+      return
+    }
+
+    const newChats: ChatMessage[] = [
+      ...chatHistory,
+      { content: prompt, role: 'user' },
+    ]
+    const params = {
+      model: 'gpt-3.5-turbo',
+      messages: [sysPrompt, ...newChats],
     }
     const apiKey = process.env.NEXT_PUBLIC_OPENAI_API_KEY
-    const res = await fetch("https://api.openai.com/v1/chat/completions", {
+    const res = await fetch('https://api.openai.com/v1/chat/completions', {
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
         Authorization: `Bearer ${apiKey}`,
       },
-      method: "POST",
+      method: 'POST',
       body: JSON.stringify(params),
     })
     const { choices } = await res.json()
     const response = choices[0].message
-    const newMsg: ChatMessage = {role: response.role, content: response.content}
+    const newMsg: ChatMessage = {
+      role: response.role,
+      content: response.content,
+    }
     setChatHistory([...newChats, newMsg])
   }
-  
+
   const handleTyping = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.preventDefault()
     setPrompt(event.target.value)
@@ -53,12 +80,12 @@ const Chat = () => {
     sendPrompt()
   }
 
-  return(
+  return (
     <div className="flex flex-col gap-4 p-6">
       <div className="flex flex-col gap-4 py-24">
-        {chatHistory.map((message: ChatMessage) =>
+        {chatHistory.map((message: ChatMessage) => (
           <div key={message.content}>
-            {message.role === "user" ? (
+            {message.role === 'user' ? (
               <div className="flex flex-row text-left gap-4">
                 <p className="font-bold">Sinä</p>
                 <p className="flex-grow">{message.content}</p>
@@ -70,7 +97,7 @@ const Chat = () => {
               </div>
             )}
           </div>
-        )}
+        ))}
       </div>
       <form onSubmit={submitPrompt}>
         <input

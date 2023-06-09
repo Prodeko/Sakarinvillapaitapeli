@@ -1,5 +1,5 @@
 "use client"
-import { systemPrompt } from "@/common/prompts";
+import { generateSystemPrompt } from "@/common/prompts";
 import { useState } from "react";
 
 interface ChatMessage {
@@ -21,7 +21,7 @@ const Chat = () => {
     const newChats: ChatMessage[] = [...chatHistory, {content: prompt, role: "user"}]
     const sysPrompt: ChatMessage = {
       role: "system",
-      content: systemPrompt
+      content: generateSystemPrompt()
     }
     const params =  {
       "model": "gpt-3.5-turbo",

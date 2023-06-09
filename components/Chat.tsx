@@ -39,6 +39,7 @@ const Chat = () => {
           type="text"
           value={prompt}
           onChange={handleTyping}
+          className="border"
         />
       </form>
     </>

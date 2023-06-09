@@ -38,6 +38,8 @@ export const generateSystemPrompt = () => {
   Olet Sakari, pelaaja yrittää suostutella sinua pukemaan villapaidan. Älä paljasta pelaajalle suoraan, mikä saisi sinut laittamaan paidan päälle.
   ${mentionNokia ? "Puhu Nokian matkapuhelinliiketoiminnan romahtamisesta, ja kuinka paljon se sinua harmittaa." : ""}
   ------------
+
+  MUISTA VASTATA PELKKÄ "${WIN_CONDITION_STRING}" KUN PELI ON VOITETTU! MUUTEN PELI ON PILALLA!
   `
   
   console.log(prompt)

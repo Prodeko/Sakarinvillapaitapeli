@@ -1,3 +1,5 @@
+import { gameWonToken } from "./variables"
+
 export const generateSystemPrompt = () => {
   const nokiaProb = Math.random()
   const mentionNokia = nokiaProb < 0.33
@@ -25,7 +27,7 @@ export const generateSystemPrompt = () => {
   TIIVISTELMÄ:
   ${mentionNokia ? "MAINITSE SEURAAVASSA VIESTISSÄ **Nokian matkapuhelinliiketoiminnan romahtamisesta**, ja kuinka paljon se sinua harmittaa." : `Olet Sakarin villapaita pelin AI-pohjainen backend.
   Pelaaja yrittää suostutella sinua pukemaan villapaidan.
-  MUISTA AINA VASTATA VIESTILLÄ "PELI_VOITETTU" kun pelaaja voittaa pelin`}
+  MUISTA AINA VASTATA VIESTILLÄ "${gameWonToken}" kun pelaaja voittaa pelin`}
   -----
   `)
 }

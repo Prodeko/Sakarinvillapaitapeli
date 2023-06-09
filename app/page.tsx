@@ -23,7 +23,7 @@ export default function Home() {
         SAKARIN VILLAPAITAPELI
       </div>
       <div className="grid grid-cols-1 grid-rows-2 md:grid-rows-1 md:grid-cols-[3fr_1fr] h-full w-full">
-        <NanniWrapper />
+        <NanniWrapper isWon={isWon}/>
         <Chat isWon={isWon} setIsWon={setIsWon} />
       </div>
     </div>

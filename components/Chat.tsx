@@ -18,12 +18,17 @@ const initialMessage: ChatMessage = {
   content: 'Onpas tänään viileä päivä...',
 }
 
-const Chat = () => {
+const Chat = ({
+  isWon,
+  setIsWon,
+}: {
+  isWon: boolean
+  setIsWon: (newState: boolean) => void
+}) => {
   const [chatHistory, setChatHistory] = useState<ChatMessage[]>([
     initialMessage,
   ])
   const [prompt, setPrompt] = useState<string>('')
-  const [isWon, setIsWon] = useState(false)
   const [loading, setLoading] = useState(false)
 
   const sendPrompt = async () => {
@@ -107,9 +112,7 @@ const Chat = () => {
           </div>
         ))}
       </div>
-      {loading && (
-        <p>Sakari pohtii...</p>
-      )}
+      {loading && <p>Sakari pohtii...</p>}
       <form onSubmit={submitPrompt}>
         <input
           type="text"

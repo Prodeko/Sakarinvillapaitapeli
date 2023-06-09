@@ -1,9 +1,13 @@
+'use client'
+
 import Image from 'next/image'
 import NanniWrapper from '@/components/NanniButton/wrapper'
 import next from '../public/next.svg'
 import Chat from '../components/Chat'
+import { useState } from 'react'
 
 export default function Home() {
+  const [isWon, setIsWon] = useState(false)
   return (
     <div
       className="w-full h-full"
@@ -20,7 +24,7 @@ export default function Home() {
       </div>
       <div className="grid grid-cols-1 grid-rows-2 md:grid-rows-1 md:grid-cols-[3fr_1fr] h-full w-full">
         <NanniWrapper />
-        <Chat />
+        <Chat isWon={isWon} setIsWon={setIsWon} />
       </div>
     </div>
   )

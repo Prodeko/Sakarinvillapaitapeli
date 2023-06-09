@@ -55,12 +55,20 @@ const Chat = () => {
 
   return(
     <div className="flex flex-col gap-4 p-6">
-      <div className="flex flex-col gap-4 py-12">
+      <div className="flex flex-col gap-4 py-24">
         {chatHistory.map((message: ChatMessage) =>
-          <div
-            className={message.role === "user" ? "text-left" : "text-right"}
-            key={message.content}>
-            {message.content}
+          <div key={message.content}>
+            {message.role === "user" ? (
+              <div className="flex flex-row text-left gap-4">
+                <p className="font-bold">Sinä</p>
+                <p className="flex-grow">{message.content}</p>
+              </div>
+            ) : (
+              <div className="flex flex-row text-left gap-4">
+                <p className="flex-grow">{message.content}</p>
+                <p className="font-bold">Sakari</p>
+              </div>
+            )}
           </div>
         )}
       </div>

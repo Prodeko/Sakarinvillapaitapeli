@@ -31,7 +31,7 @@ const Chat = () => {
     const { choices } = await res.json()
     const response = choices[0].message
     const newMsg: ChatMessage = {role: response.role, content: response.content}
-    setChatHistory(chatHistory => [...chatHistory, newMsg])
+    setChatHistory([...newChats, newMsg])
   }
   
   const handleTyping = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -46,13 +46,13 @@ const Chat = () => {
   }
 
   return(
-    <>
-      <div className="flex flex-col">
+    <div className="flex flex-col gap-4 p-6">
+      <div className="flex flex-col gap-4 py-12">
         {chatHistory.map((message: ChatMessage) =>
           <div
-            className={message.role === "user" ? "self-start" : "self-end"}
+            className={message.role === "user" ? "text-left" : "text-right"}
             key={message.content}>
-            {message.role}: {message.content}
+            {message.content}
           </div>
         )}
       </div>
@@ -64,7 +64,7 @@ const Chat = () => {
           className="border"
         />
       </form>
-    </>
+    </div>
   )
 }
 

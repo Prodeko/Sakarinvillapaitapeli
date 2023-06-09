@@ -93,8 +93,8 @@ const Chat = ({
     sendPrompt()
   }
 
-  return (
-    <div className="flex flex-col gap-4 p-6 max-w-full overflow-scroll">
+  return(
+    <div className="flex flex-col gap-4 p-6 md:bg-gradient-to-l md:bg-slate-100 md:bg-opacity-50 bg-gradient-to-b from-indigo-300">
       <div className="flex flex-col gap-4 py-24">
         {chatHistory.map((message: ChatMessage) => (
           <div key={message.content}>

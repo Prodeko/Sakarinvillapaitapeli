@@ -12,6 +12,7 @@ interface ChatMessage {
   content: string
   role: 'user' | 'assistant' | 'system'
 }
+import { fetchChatResponse } from '../common/services'
 
 const initialMessage: ChatMessage = {
   role: 'assistant',
@@ -60,15 +61,25 @@ const Chat = ({
       messages: [sysPrompt, ...newChats],
     }
     const apiKey = process.env.NEXT_PUBLIC_OPENAI_API_KEY
-    const res = await fetch('https://api.openai.com/v1/chat/completions', {
+    //const res = await fetch('https://api.openai.com/v1/chat/completions', {
+    //  headers: {
+    //    'Content-Type': 'application/json',
+    //  },
+    //  method: 'POST',
+    //  body: JSON.stringify(params),
+    //})
+
+    const res = await fetch('/api/chat', {
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${apiKey}`,
       },
-      method: 'POST',
       body: JSON.stringify(params),
-    })
-    const { choices } = await res.json()
+      method: 'POST',
+    }).then(res => res.json())
+
+    console.log(res)
+
+    const { choices } = res
     const response = choices[0].message
     const newMsg: ChatMessage = {
       role: response.role,

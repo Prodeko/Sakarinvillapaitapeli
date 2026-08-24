@@ -2,6 +2,7 @@
 import { generateSystemPrompt } from '@/common/prompts'
 import { checkIfMessageContainsWinningToken } from '@/utils/checkIfMessageContainsWinningToken'
 import {
+  CHAT_MODEL,
   FAKE_LAG_AFTER_CHAT_LIMIT_HARD_CAP_MS,
   MAX_CHAT_LENGTH,
   WINNING_MESSAGE,
@@ -12,7 +13,6 @@ interface ChatMessage {
   content: string
   role: 'user' | 'assistant' | 'system'
 }
-import { fetchChatResponse } from '../common/services'
 
 const initialMessage: ChatMessage = {
   role: 'assistant',
@@ -48,6 +48,7 @@ const Chat = ({
       setTimeout(() => {
         setChatHistory([...chatHistory, winningMessage])
         setIsWon(true)
+        setLoading(false)
       }, FAKE_LAG_AFTER_CHAT_LIMIT_HARD_CAP_MS)
       return
     }
@@ -57,40 +58,54 @@ const Chat = ({
       { content: prompt, role: 'user' },
     ]
     const params = {
-      model: 'gpt-3.5-turbo',
+      model: CHAT_MODEL,
       messages: [sysPrompt, ...newChats],
     }
-    const apiKey = process.env.NEXT_PUBLIC_OPENAI_API_KEY
-    //const res = await fetch('https://api.openai.com/v1/chat/completions', {
-    //  headers: {
-    //    'Content-Type': 'application/json',
-    //  },
-    //  method: 'POST',
-    //  body: JSON.stringify(params),
-    //})
 
-    const res = await fetch('/api/chat', {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(params),
-      method: 'POST',
-    }).then(res => res.json())
+    try {
+      const res = await fetch('/api/chat', {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(params),
+        method: 'POST',
+      }).then(res => res.json())
 
-    console.log(res)
+      const message = res?.choices?.[0]?.message
 
-    const { choices } = res
-    const response = choices[0].message
-    const newMsg: ChatMessage = {
-      role: response.role,
-      content: response.content,
+      if (!message?.content) {
+        // Surface the failure instead of leaving the UI stuck on "Sakari pohtii...".
+        // Gemini returns errors wrapped in an array, so unwrap that first.
+        const payload = Array.isArray(res) ? res[0] : res
+        const raw = payload?.error?.message ?? payload?.error
+        const detail =
+          typeof raw === 'string' && raw ? raw : 'tuntematon virhe'
+        setChatHistory([
+          ...newChats,
+          {
+            role: 'assistant',
+            content: `[Sakari ei saanut yhteyttä: ${detail}]`,
+          },
+        ])
+        return
+      }
+
+      const newMsg: ChatMessage = {
+        role: 'assistant',
+        content: message.content,
+      }
+
+      setIsWon(checkIfMessageContainsWinningToken(newMsg.content))
+      setChatHistory([...newChats, newMsg])
+    } catch (error) {
+      console.error('Chat request failed:', error)
+      setChatHistory([
+        ...newChats,
+        { role: 'assistant', content: '[Sakari ei saanut yhteyttä palvelimeen]' },
+      ])
+    } finally {
+      setLoading(false)
     }
-
-    const isWon = checkIfMessageContainsWinningToken(newMsg.content)
-
-    setIsWon(isWon)
-    setChatHistory([...newChats, newMsg])
-    setLoading(false)
   }
 
   const handleTyping = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -107,8 +122,8 @@ const Chat = ({
   return(
     <div className="flex flex-col gap-4 p-6 md:bg-gradient-to-l md:bg-slate-100 md:bg-opacity-50 bg-gradient-to-b from-indigo-300">
       <div className="flex flex-col gap-4 py-24">
-        {chatHistory.map((message: ChatMessage) => (
-          <div key={message.content}>
+        {chatHistory.map((message: ChatMessage, index: number) => (
+          <div key={index}>
             {message.role === 'user' ? (
               <div className="flex flex-row text-left gap-4">
                 <p className="font-bold">Sinä</p>
